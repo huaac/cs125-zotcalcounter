@@ -1,0 +1,7 @@
+{
+  "name": "zotcalcounter",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
