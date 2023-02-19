@@ -1,32 +1,41 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="center">
-      ZotFitness
-    </ion-title>
-  </ion-toolbar>
+<!--  <ion-toolbar>-->
+<!--    <ion-title class="center">-->
+<!--      ZotFitness-->
+<!--    </ion-title>-->
+<!--  </ion-toolbar>-->
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<!--  <ion-header collapse="condense">-->
+<!--    <ion-toolbar>-->
+<!--      <ion-title size="large">Blank</ion-title>-->
+<!--    </ion-toolbar>-->
+<!--  </ion-header>-->
+  <div class="logo">
+    <ion-title style="font-size: 50px;">ZOTFITNESS</ion-title>
+  </div>
 
   <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<!--    <strong>Ready to create an app?</strong>-->
+<!--    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>-->
     <div>
+      <div class="loginText">
+        <p style="color: #FFC72C; font-size: 25px; margin-bottom: 20px;">Login</p>
+      </div>
       <div>
         <label for="Name">Username:</label>
-          <input type="text" id="username" name="username" placeholder="email">
+          <input [(ngModel)]="usernameCategory" type="text" id="username" name="username" placeholder="email">
       </div>
       <br><br> <!--makes a space-->
       <div>
         <label for="Name">Password:</label>
-          <input type="text" id="password" name="password" placeholder="password">
+          <input [(ngModel)]="passwordCategory" type="text" id="password" name="password" placeholder="password">
       </div>
     </div>
+
+    <div>&nbsp;</div>
+
     <div>
 <!--       <a href="" class="btn btn-primary" style="background-color: #527769;" role="button""><h3>Login</h3></a>-->
 <!--      <a href="questions.html">Login</a>-->
