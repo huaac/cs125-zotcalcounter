@@ -1,3 +1,60 @@
-<p>
-  questions works!
-</p>
+<ion-content class="ion-padding">
+  <h1>To start...</h1>
+  <h3>There are a couple things we'd love to get to know about you!</h3>
+
+  <!-- form usage: https://www.w3schools.com/html/html_forms.asp -->
+  <form> <!-- replace with actual file name -->
+    <p>1. Fill out the personal information below.</p>
+    <app-input label="Height"></app-input>
+    <label for="height">Height:</label>
+    <input type="text" id="height" name="height"><br>
+    <label for="weight">Weight:</label>
+    <input type="text" id="weight" name="weight"><br>
+    <label for="gender">Gender:</label><br>
+    <input type="radio" id="female" name="gender" value="Female">
+    <label for="female">Female</label><br>
+    <input type="radio" id="male" name="gender" value="Male">
+    <label for="male">Male</label><br>
+    <input type="radio" id="other" name="gender" value="Other">
+    <label for="other">Other</label>
+
+    <p><label for="goal">2. What's your exercise goal?</label></p>
+    <textarea id="goal" name="goal" rows="4" cols="50"></textarea>
+
+    <p><label for="muscles">3. What muscle group(s) would you like to focus on?</label></p>
+    <img src='muscles.jpg' alt='Diagram of common muscle groups'>
+    <input type="checkbox" id="abdominals" name="abdominals" value="Abdominals">
+    <label for="abdominals"> Abdominals</label><br>
+    <input type="checkbox" id="abductors" name="abductors" value="Abductors">
+    <label for="abductors"> Abductors</label><br>
+    <input type="checkbox" id="biceps" name="biceps" value="Biceps">
+    <label for="biceps"> Biceps</label><br>
+    <input type="checkbox" id="calves" name="calves" value="Calves">
+    <label for="calves"> Calves</label><br>
+    <input type="checkbox" id="chest" name="chest" value="Chest">
+    <label for="chest"> Chest</label><br>
+    <input type="checkbox" id="forearms" name="forearms" value="Forearms">
+    <label for="forearms"> Forearms</label><br>
+    <input type="checkbox" id="glutes" name="glutes" value="Glutes">
+    <label for="glutes"> Glutes</label><br>
+    <input type="checkbox" id="hamstrings" name="hamstrings" value="Hamstrings">
+    <label for="hamstrings"> Hamstrings</label><br>
+    <input type="checkbox" id="lats" name="lats" value="Lats">
+    <label for="lats"> Lats</label><br>
+    <input type="checkbox" id="lowerback" name="lowerback" value="Lower Back">
+    <label for="lowerback"> Lower Back</label><br>
+    <input type="checkbox" id="middleback" name="middleback" value="Middle Back">
+    <label for="middleback"> Middle Back</label><br>
+    <input type="checkbox" id="neck" name="neck" value="Neck">
+    <label for="neck"> Neck</label><br>
+    <input type="checkbox" id="quadriceps" name="quadriceps" value="Quadriceps">
+    <label for="quadriceps"> Quadriceps</label><br>
+    <input type="checkbox" id="traps" name="traps" value="Traps">
+    <label for="traps"> Traps</label><br>
+    <input type="checkbox" id="triceps" name="triceps" value="Triceps">
+    <label for="triceps"> Triceps</label><br>
+
+
+    <br><input type="submit" value="Submit">
+  </form>
+</ion-content>
