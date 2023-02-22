@@ -15,6 +15,10 @@ const routes: Routes = [
   },
   //added
   { path: 'questions', component: QuestionsComponent},
+  { //search auto-added when generated search page
+    path: 'search',
+    loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
+  },
 ];
 
 @NgModule({
