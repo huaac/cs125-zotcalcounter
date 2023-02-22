@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { SearchService } from 'src/app/service/search.service'; //added
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.page.html',
@@ -7,9 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchPage implements OnInit {
 
-  constructor() { }
+  constructor(private searchService: SearchService) { }
 
   ngOnInit() {
+    this.searchService.getMuscleWorkouts(); // on initialization of page, print bicep data
   }
 
 }
