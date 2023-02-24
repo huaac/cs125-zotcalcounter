@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 import {QuestionsComponent} from './questions/questions.component';
+// import {SearchPage} from './search/search.page';
+import {HistoryComponent} from './history/history.component';
 
 const routes: Routes = [
   {
@@ -19,6 +21,8 @@ const routes: Routes = [
     path: 'search',
     loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
   },
+  //added
+  { path: 'history', component: HistoryComponent},
 ];
 
 @NgModule({
