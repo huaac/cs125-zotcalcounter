@@ -8,11 +8,6 @@
   transform: translateY(-50%);
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
 #container p {
   font-size: 16px;
   line-height: 22px;
@@ -22,10 +17,13 @@
   margin: 0;
 }
 
-/**.ion-select::part(placeholder), ion-select::part(text){
-  width: 1%;
-  justify-content: center;
-}**/
+.ion-text-center{
+  text-align: center
+}
+
+.ion-select::part(placeholder){
+  text-align: center;
+}
 
 .center {
   margin: auto;
