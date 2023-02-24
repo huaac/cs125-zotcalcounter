@@ -1,0 +1,48 @@
+#container {
+  text-align: left;
+
+  position: absolute;
+  left: 1%;
+  right: 0;
+  top: 25%;
+  transform: translateY(-50%);
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #8c8c8c;
+
+  margin: 0;
+}
+
+/**.ion-select::part(placeholder), ion-select::part(text){
+  width: 1%;
+  justify-content: center;
+}**/
+
+.center {
+  margin: auto;
+  text-align: center;
+  width: 50%;
+  //border: 3px solid green;
+  padding: 10px;
+}
+
+.btn {
+  background-color: #0C2340;
+  color: black;
+  width: 120px;
+  text-align: center;
+  font-size: 20px;
+  color: white; //#FFC72C;
+  padding: 10px;
+  border-radius: 10px;
+//   border: 3px dashed blue;
+}

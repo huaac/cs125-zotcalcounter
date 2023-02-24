@@ -5,15 +5,17 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div>
-    <h1>PROFILE</h1>
+  <div id = "container">
+    <div class="profileText">
+        <p style="color: #FFC72C; font-size: 25px; margin-bottom: 20px;">Profile</p>
+    </div>
 
     <!-- form usage: https://www.w3schools.com/html/html_forms.asp -->
     <form> <!-- replace with actual file name -->
       <p><label for="goal">Exercise Goal:</label></p>
       <textarea id="goal" name="goal" rows="4" cols="50"></textarea>
 
-    
+      <br><br>
       <p><label for="muscles">Muscle Focus:</label></p>
       <ion-list>
         <ion-item>
