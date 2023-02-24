@@ -7,6 +7,9 @@ import { Router } from '@angular/router'; //added
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.scss'],
 })
+export class MyComponent {
+  workoutCompleted: boolean = false;
+}
 export class HistoryComponent implements OnInit {
 
   constructor(private router:Router) { }
