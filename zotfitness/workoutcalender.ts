@@ -6,9 +6,19 @@ const offDays = readline.question("Enter the days off (separated by comma and sp
 const workDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].filter(day => !offDays.includes(day));
 const dailyMinutes = Math.round(totalMinutes / workDays.length);
 
+// Determine the number of days in the month, accounting for the days off
+let daysInMonth = 31;
+for (let day of offDays) {
+  const index = workDays.indexOf(day);
+  if (index >= 0) {
+    workDays.splice(index, 1);
+    daysInMonth--;
+  }
+}
+
 // Initialize a dictionary to store the daily workout minutes
 const schedule = {};
-for (let day = 1; day <= 31; day++) {
+for (let day = 1; day <= daysInMonth; day++) {
   const weekday = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][(day - 1) % 7];
   if (workDays.includes(weekday)) {
     schedule[day] = [weekday, dailyMinutes];
