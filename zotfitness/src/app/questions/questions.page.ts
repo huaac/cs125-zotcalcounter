@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
-
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router'; //added
 
 @Component({
   selector: 'app-questions',
-  templateUrl: './questions.component.html',
-  styleUrls: ['./questions.component.scss'],
+  templateUrl: './questions.page.html',
+  styleUrls: ['./questions.page.scss'],
 })
-export class QuestionsComponent implements OnInit {
+export class QuestionsPage implements OnInit {
 
   constructor(private router:Router) { }
 

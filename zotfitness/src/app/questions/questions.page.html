@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>questions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div>
+    <h1>PROFILE</h1>
+
+    <!-- form usage: https://www.w3schools.com/html/html_forms.asp -->
+    <form> <!-- replace with actual file name -->
+      <p><label for="goal">Exercise Goal:</label></p>
+      <textarea id="goal" name="goal" rows="4" cols="50"></textarea>
+
+    
+      <p><label for="muscles">Muscle Focus:</label></p>
+      <ion-list>
+        <ion-item>
+          <ion-select placeholder="Select muscle groups that apply" [multiple]="true">
+            <ion-select-option value="abdominals">Abdominals</ion-select-option>
+            <ion-select-option value="abductors">Abductors</ion-select-option>
+            <ion-select-option value="calves">Calves</ion-select-option>
+            <ion-select-option value="chest">Chest</ion-select-option>
+            <ion-select-option value="forearms">Forearms</ion-select-option>
+            <ion-select-option value="glutes">Glutes</ion-select-option>
+            <ion-select-option value="hamstrings">Hamstrings</ion-select-option>
+            <ion-select-option value="lats">Lats</ion-select-option>
+            <ion-select-option value="lowerback">Lowerback</ion-select-option>
+            <ion-select-option value="middleback">Middleback</ion-select-option>
+            <ion-select-option value="neck">Neck</ion-select-option>
+            <ion-select-option value="quadriceps">Quadriceps</ion-select-option>
+            <ion-select-option value="traps">Traps</ion-select-option>
+            <ion-select-option value="triceps">Triceps</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+
+      <br><button class="btn" (click)="onQuestionsClick()" type="submit">Submit</button>
+    </form>
+  </div>
+</ion-content>
