@@ -8,10 +8,12 @@
   <ion-card>
     <ion-card-content>
       <p>Did you workout today?</p>
-      <ion-item>
-        <ion-label>Yes</ion-label>
-        <ion-checkbox></ion-checkbox>
+      <ion-item slot="end">
+        <ion-checkbox [(ngModel)]="workoutCompleted" style="background: white; border: 1px solid black; border-radius: 3px; width: 20px; height: 20px; position: relative;">
+          <ion-icon name="checkmark" style="position: absolute; top: -2px; left: -1px; font-size: 20px; color: black;"></ion-icon>
+        </ion-checkbox>
       </ion-item>
+      <p *ngIf="isChecked">Congrats! You worked out today!</p>
       <p>Previous Workouts:</p>
       <ion-list>
         <ion-item>
