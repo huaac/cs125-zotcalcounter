@@ -1,11 +1,53 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>search</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>workoutList</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+
+
+<ion-row>
+	<ion-col>
+		<button ion-button class="my-button" large >
+			<b>Save</b>
+		</button>
+	</ion-col>
+
+	<ion-col offset-sm="9">
+		<button ion-button class="my-button" large>
+			<b>Clear</b>
+		</button>
+	</ion-col>
+</ion-row>
+
  <div>
    <button class="btn" (click)="onSearchClick()" type="submit">Submit</button>
  </div>
+
+<ion-label class="my-label">Search</ion-label>
+
+<ion-searchbar placeholder="e.g. ?type=strength&muscle=biceps" (ionChange)="searchbarChange($event)"></ion-searchbar>
+
+<ion-content>
+  <ion-list>
+    <ion-item button *ngFor="let item of workouts;">
+      <p>{{item}}</p>
+
+<!--      <ion-badge slot="end"> {{ item.vote_average }} </ion-badge>-->
+    </ion-item>
+  </ion-list>
+
 </ion-content>
+
+
+<!--<ion-header>-->
+<!--  <ion-toolbar>-->
+<!--    <ion-title>search</ion-title>-->
+<!--  </ion-toolbar>-->
+<!--</ion-header>-->
+
+<!--<ion-content>-->
+<!-- <div>-->
+<!--   <button class="btn" (click)="onSearchClick()" type="submit">Submit</button>-->
+<!-- </div>-->
+<!--</ion-content>-->
