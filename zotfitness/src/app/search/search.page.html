@@ -20,15 +20,23 @@
 	</ion-col>
 </ion-row>
 
- <div>
+
+<div>
    <button class="btn" (click)="onSearchClick()" type="submit">Submit</button>
  </div>
 
-<ion-label class="my-label">Search</ion-label>
-
-<ion-searchbar placeholder="e.g. ?type=strength&muscle=biceps" (ionChange)="searchbarChange($event)"></ion-searchbar>
-
 <ion-content>
+  <!--  displays current weather section-->
+  <div>
+    <p style="color: #FFC72C; font-size: 25px; margin-bottom: 20px; text-align: center;">Current Weather in Irvine</p>
+    <p style="font-size: 17px; margin-bottom: 20px; text-align: center;">{{currentWeather}}&#8457;</p>
+  </div>
+
+  <!--  seach workout section-->
+<!--  <ion-label class="my-label" style="text-align:center; color: #FFC72C;">Search Workout</ion-label>-->
+    <p style="color: #FFC72C; font-size: 25px; margin-bottom: 20px; text-align: center;">Search Workout</p>
+  <ion-searchbar placeholder="e.g. ?type=strength&muscle=biceps" (ionChange)="searchbarChange($event)"></ion-searchbar>
+
   <ion-list>
     <ion-item button *ngFor="let item of workouts;">
       <p>{{item}}</p>

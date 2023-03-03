@@ -21,8 +21,8 @@ export class SearchService {
   constructor(private http:HttpClient) { }
 
   //return sample data from calling baseURL in environments folder
-  private sendRequestToExpress(endpoint: string):Observable<any> {
-    let resp = this.http.get(`${environment.baseURL}${endpoint}`,
+  private sendRequestToExpressWorkout(endpoint: string):Observable<any> {
+    let resp = this.http.get(`${environment.workoutBaseURL}${endpoint}`,
 //       params: {muscle: 'biceps'},
       {headers: {'X-Api-Key': environment.apiKey}});
     return resp;
@@ -35,11 +35,25 @@ export class SearchService {
     //this.sendRequestToExpress('type=strength&muscle=biceps').subscribe(data => {
     //  console.log(data);
     //});
-    return this.sendRequestToExpress(parameters);
+    return this.sendRequestToExpressWorkout(parameters);
+  }
+
+// gets data from weather website Mateo.com in environment folder
+  private sendRequestToExpressWeather(endpoint: string):Observable<any> {
+    let resp = this.http.get(`${environment.weatherBaseURL}${endpoint}`);
+//       params: {muscle: 'biceps'},
+//       {headers: {'X-Api-Key': environment.apiKey}});
+    return resp;
+  }
+
+  // adds parameters to the weather base url for more specific information
+  getWeatherData(parameters: string):Observable<any>{
+    return this.sendRequestToExpressWeather(parameters);
   }
 
 }
 
+// "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true&hourly=temperature_2m,relativehumidity_2m,windspeed_10m"
 
 // import { Injectable } from '@angular/core';
 //

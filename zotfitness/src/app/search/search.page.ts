@@ -14,13 +14,16 @@ export class SearchPage implements OnInit {
 
   workouts: string[] = [];
   currentPage = 1;
+  currentWeather = 0;
+
 //   imageBaseUrl = environment.images; // no images atm...
 
   constructor(private searchService: SearchService, private router:Router, private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
 //     this.searchService.getMuscleWorkouts(); // on initialization of page, print bicep data
-  this.loadWorkouts("")
+    this.loadWorkouts("");
+    this.getWeatherData();
   }
 
   onSearchClick() {
@@ -58,6 +61,15 @@ export class SearchPage implements OnInit {
   async clear(){
     console.log("Hello World");
     //this.loadWorkouts(input.detail.value); // The parameters
+  }
+
+  async getWeatherData(){
+    this.searchService.getWeatherData('latitude=33.67&longitude=-117.82&hourly=temperature_2m,apparent_temperature&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles').subscribe(
+    (inf) => {
+      let latest_app_temp_index = inf.hourly.apparent_temperature.length-1;
+      this.currentWeather = inf.hourly.apparent_temperature[latest_app_temp_index];
+    }
+    );
   }
 
 }
