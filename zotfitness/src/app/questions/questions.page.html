@@ -12,7 +12,7 @@
 
     <!-- form usage: https://www.w3schools.com/html/html_forms.asp -->
     <form> <!-- replace with actual file name -->
-      <p><label for="goal">Exercise Goal:</label></p>
+      <p><label for="goal">Exercise Goal:</label></p><br>
       <textarea input [(ngModel)]="goalCategory" id="goal" name="goal" rows="4" cols="40"></textarea>
 
       <br><br>
@@ -27,7 +27,7 @@
         </ion-list>
       </div>
 
-      <br><button class="btn" (click)="onQuestionsClick()" type="submit">Submit</button>
+      <br><br><button class="btn" (click)="onQuestionsClick()" type="submit">Submit</button>
     </form>
   </div>
 </ion-content>
