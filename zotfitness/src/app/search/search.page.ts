@@ -4,12 +4,19 @@ import { SearchService } from 'src/app/service/search.service'; // added
 import { Router } from '@angular/router'; //added
 import { InfiniteScrollCustomEvent, LoadingController } from '@ionic/angular'; //added
 
+import { ModalController } from '@ionic/angular'; // added
+import { DescriptionPage } from 'src/app/description/description.page';
+import { Input, Injectable } from  '@angular/core';// added
+
+
+// import { Output, EventEmitter } from '@angular/core'; //added
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
 })
+@Injectable({ providedIn: 'root' })
 export class SearchPage implements OnInit {
 
   workouts: string[] = [];
@@ -18,7 +25,7 @@ export class SearchPage implements OnInit {
 
 //   imageBaseUrl = environment.images; // no images atm...
 
-  constructor(private searchService: SearchService, private router:Router, private loadingCtrl: LoadingController) { }
+  constructor(private searchService: SearchService, private router:Router, private loadingCtrl: LoadingController, public modalCtrl:ModalController) { }
 
   ngOnInit() {
 //     this.searchService.getMuscleWorkouts(); // on initialization of page, print bicep data
@@ -28,6 +35,10 @@ export class SearchPage implements OnInit {
 
   onSearchClick() {
     this.router.navigateByUrl('/history');
+  }
+
+  onSearchClickTEST() { // REMOVE LATER
+    this.router.navigateByUrl('/description');
   }
 
   async loadWorkouts(parameters: string, event?: InfiniteScrollCustomEvent) {
@@ -72,4 +83,30 @@ export class SearchPage implements OnInit {
     );
   }
 
+// calls the modal that presents the workout description
+  async initWorkoutDescription(name: string) {
+
+    let param = 'name=' + name; //'name=' + name of workout
+
+    this.searchService.getMuscleWorkouts(param).subscribe(
+      async (res) => {
+
+        const desc_modal = await this.modalCtrl.create({
+          component: DescriptionPage,
+
+          componentProps: {
+            workoutName: name,
+            workoutType: res[0].type,
+            workoutMuscle: res[0].muscle,
+            workoutEquipment: res[0].equipment,
+            workoutDifficulty: res[0].difficulty,
+            workoutInstruction: res[0].instructions}
+          });
+
+        desc_modal.onDidDismiss().then((modalDataResponse) => {
+        });
+
+        return await desc_modal.present();
+    });
+  }
 }

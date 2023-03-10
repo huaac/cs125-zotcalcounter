@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button (click)="close()" fill="clear">
+      <ion-icon  slot="icon-only" name="close-outline"></ion-icon>
+    </ion-button>
+    <ion-title>description</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <div>
+          <p class="largeboldedyellow">{{workoutName}}</p>
+    </div>
+    <div>
+      <div>
+        <span class="smallboldedyellow">Type of Workout: </span>
+        <span>{{workoutType}}</span>
+      </div>
+      <div>
+        <span class="smallboldedyellow">Muscles Targeted: </span>
+        <span>{{workoutMuscle}}</span>
+      </div>
+      <div>
+        <span class="smallboldedyellow">Equipment Needed: </span>
+        <span>{{workoutEquipment}}</span>
+      </div>
+      <div>
+        <span class="smallboldedyellow">Difficulty: </span>
+        <span>{{workoutDifficulty}}</span>
+      </div>
+      <div>
+        <p class="smallboldedyellow">Instructions:</p>
+        <p class="lrspacing">{{workoutInstruction}}</p>
+      </div>
+<!--      <p class="smallboldedyellow">Type of Workout:</p>-->
+<!--      <p class="sameline">{{workoutType}}</p>-->
+<!--      <p class="smallboldedyellow">Muscles Targeted:</p>-->
+<!--      <p class="center">{{workoutMuscle}}</p>-->
+<!--      <p class="smallboldedyellow">Equipment Needed:</p>-->
+<!--      <p class="center">{{workoutEquipment}}</p>-->
+<!--      <p class="smallboldedyellow">Difficulty:</p>-->
+<!--      <p class="center">{{workoutDifficulty}}</p>-->
+<!--      <p class="smallboldedyellow">Instructions:</p>-->
+<!--      <p class="center">{{workoutInstruction}}</p>-->
+    </div>
+  </div>
+</ion-content>

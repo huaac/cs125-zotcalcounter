@@ -38,7 +38,7 @@
   <ion-searchbar placeholder="e.g. ?type=strength&muscle=biceps" (ionChange)="searchbarChange($event)"></ion-searchbar>
 
   <ion-list>
-    <ion-item button *ngFor="let item of workouts;">
+    <ion-item button (click)="initWorkoutDescription(item)" *ngFor="let item of workouts;">
       <p>{{item}}</p>
 
 <!--      <ion-badge slot="end"> {{ item.vote_average }} </ion-badge>-->
