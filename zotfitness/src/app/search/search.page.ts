@@ -22,6 +22,15 @@ export class SearchPage implements OnInit {
   workouts: string[] = [];
   currentPage = 1;
   currentWeather = 0;
+  searchTerm = "";
+
+  typeParam = ["cardio", "olympic_weightlifting", "plyometrics", "powerlifting", "strength", "stretching", "strongman"];
+  difficultyParam = ["beginner", "intermediate", "expert"];
+  muscleParam = [
+    "abdominals", "abductors", "adductors", "biceps", "calves",
+    "chest", "forearms", "glutes", "hamstrings", "lats", "lower_back",
+    "middle_back", "neck", "quadriceps", "traps", "triceps"];
+
 
 //   imageBaseUrl = environment.images; // no images atm...
 
@@ -30,15 +39,23 @@ export class SearchPage implements OnInit {
   ngOnInit() {
 //     this.searchService.getMuscleWorkouts(); // on initialization of page, print bicep data
     this.loadWorkouts("");
-    this.getWeatherData();
+//     this.getWeatherData();
   }
 
-  onSearchClick() {
+  onHistoryClick() {
     this.router.navigateByUrl('/history');
   }
+  onProfileClick() {
+    this.router.navigateByUrl('/questions');
+  }
 
-  onSearchClickTEST() { // REMOVE LATER
-    this.router.navigateByUrl('/description');
+  onSearchClickNewWorkouts() {
+    let split_text = this.searchTerm.split(", ");
+    let text_paramm = this.buildParam(split_text);
+    text_paramm.then(
+      (res) => {
+        this.loadWorkouts(res);
+      });
   }
 
   async loadWorkouts(parameters: string, event?: InfiniteScrollCustomEvent) {
@@ -53,9 +70,11 @@ export class SearchPage implements OnInit {
     this.searchService.getMuscleWorkouts(parameters).subscribe(
       (res) => {
         loading.dismiss();
-        for (let i = 0; i < 10; i++)
-          this.workouts.push(res[i].name);
-
+        if(res.length == 1) {this.workouts.push(res[0].name);}
+        else {
+          for (let i = 0; i < 10; i++)
+            this.workouts.push(res[i].name);
+        }
       },
       (err) => {
         console.log(err);
@@ -64,14 +83,44 @@ export class SearchPage implements OnInit {
     );
   }
 
-  async searchbarChange(input: any){
-    //console.log(content.detail.value)
-    this.loadWorkouts(input.detail.value); // The parameters
-  }
+//   async searchbarChange(input: any){
+//     //console.log(content.detail.value)
+//     this.loadWorkouts(input.detail.value); // The parameters
+//   }
 
-  async clear(){
-    console.log("Hello World");
-    //this.loadWorkouts(input.detail.value); // The parameters
+//returns a string that can be plugged into the URL
+  async buildParam(text: string[]){
+    let type_bool = false;
+    let diff_bool = false;
+    let muscle_bool = false;
+    let text_param = "";
+
+    if(text.length == 1) {return "name=" + text[0];}
+    else {
+      for(let x = 0; x < text.length; x++)
+      {
+        if(this.typeParam.includes(text[x]) && type_bool == false) {
+          type_bool = true;
+          text_param += "type=" + text[x];}
+        if(this.muscleParam.includes(text[x]) && muscle_bool == false) {
+          muscle_bool = true;
+          text_param += "muscle=" + text[x];}
+        if(this.difficultyParam.includes(text[x]) && diff_bool == false) {
+          diff_bool = true;
+          text_param += "difficulty=" + text[x];}
+        if(text[x] == "olympic weightlifting") {
+          type_bool = true;
+          text_param += "type=olympic_weightlifting";}
+        if(text[x] == "lower back") {
+          muscle_bool = true;
+          text_param += "muscle=lower_back";}
+        if(text[x] == "middle back") {
+          muscle_bool = true;
+          text_param += "muscle=middle_back";}
+
+        if (text_param != "") {text_param += "&";}
+      }
+      return text_param;}
   }
 
   async getWeatherData(){
