@@ -19,7 +19,7 @@ export class CheckinPage implements OnInit {
   ngOnInit() {
   }
 
-  onQuestionsClick() {
+  onCheckinClick() {
     this.setExercise();
     this.setRating();
     this.setDuration();
