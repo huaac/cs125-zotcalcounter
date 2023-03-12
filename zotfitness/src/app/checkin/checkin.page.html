@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>checkin</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div id = "container">
+    <div class="profileText">
+        <p style="color: #FFC72C; font-size: 25px; margin-bottom: 20px;">Check In Questions</p>
+    </div>
+    <form>
+    <!-- EXERCISE ASK -->
+      <p><label for="exercise">What Exercise did you do?</label></p><br> <!-- this needs to be a selection eventually -->
+      <textarea input [(ngModel)]="exerciseCategory" id="checkinExercise" name="checkinExercise" rows="4" cols="10"></textarea>
+
+      <br><br>
+      <p><label for="muscles">Muscle Focus:</label></p>
+      <div class="ion-text-center">
+        <ion-list>
+          <ion-item>
+            <!-- RATING ASK -->
+            <ion-range (ionChange)="ratingSelect($event)" [ticks]="true" [snaps]="true" [min]="0" [max]="5"></ion-range>
+
+          <!-- DURATION ASK -->
+          <p><label for="duration">How long did you exercise? Please respond in the number of minutes (i/e "60")</label></p><br>
+          <textarea input [(ngModel)]="durationCategory" id="checkinDuration" name="checkinDuration" rows="4" cols="10"></textarea>
+
+          </ion-item>
+        </ion-list>
+      </div>
+
+      <br><br><button class="btn" (click)="onCheckinClick()" type="submit">Check In</button>
+    </form>
+  </div>
+</ion-content>
