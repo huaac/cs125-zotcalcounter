@@ -37,9 +37,9 @@ export class CheckinPage implements OnInit {
   }
 
   // event handler that updates exercise whenever user selects a muscle
-  //durationSelect(ev: Event){
-  //  this.durationCategory = (ev.target as HTMLInputElement).value;
-  //}
+  durationSelect(ev: Event){
+    this.durationCategory = (ev.target as HTMLInputElement).value;
+  }
 
   // function that deletes stored check in exercise
   removeExercise = async () => {

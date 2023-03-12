@@ -23,9 +23,8 @@
             <ion-range (ionChange)="ratingSelect($event)" [ticks]="true" [snaps]="true" [min]="0" [max]="5"></ion-range>
 
           <!-- DURATION ASK -->
-          <p><label for="duration">How long did you exercise? Please respond in the number of minutes (i/e "60")</label></p><br>
-          <textarea input [(ngModel)]="durationCategory" id="checkinDuration" name="checkinDuration" rows="4" cols="10"></textarea>
-
+          <p><label for="duration">How long did you exercise? Please respond in the number of minutes (i/e "60" for an hour)</label></p><br>
+          <ion-input (ionChange)="durationSelect($event)" type="minutes" placeholder="# Minutes"></ion-input>
           </ion-item>
         </ion-list>
       </div>
