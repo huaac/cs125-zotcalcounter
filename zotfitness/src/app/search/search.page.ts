@@ -135,6 +135,8 @@ export class SearchPage implements OnInit {
 // calls the modal that presents the workout description
   async initWorkoutDescription(name: string) {
 
+    this.searchService.testPreferences();
+
     let param = 'name=' + name; //'name=' + name of workout
 
     this.searchService.getMuscleWorkouts(param).subscribe(
