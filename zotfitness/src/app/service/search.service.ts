@@ -73,21 +73,7 @@ export class SearchService {
   getWeatherData(parameters: string):Observable<any>{
     return this.sendRequestToExpressWeather(parameters);
   }
-
-// sets capacitor.Preferences based on a list of numbers
-// keys are from 'a' ~ 'z'
-  async setPreferences(preferences: number[]){
-    for (let i = 0; i < 26; i++) {
-      let p = 0;
-      await Preferences.set({
-        key: 'a' + i,
-        value: preferences[i].toString()
-      })
-    }
-    
-  }
-
-  /*
+  
   setPreferences(preferences: number[]){
     for (let i = 0; i < 26; i++) {
       let p = 0;
@@ -97,7 +83,7 @@ export class SearchService {
       })
     }
     
-  }*/
+  }
 
   checkName = async (index: string) => {
     const { value } = await Preferences.get({ key: index });
@@ -105,24 +91,17 @@ export class SearchService {
   };
 
 
-  // gets the capacitor.Preferences in the format of a list of numbers
-  async getPreferences(): Promise<number[]>{
-    let preferences: number[] = [];
-    for (let i = 0; i < 26; i++)
-      preferences.push(Number((await Preferences.get({ key: 'a' + i })).value));
-    return preferences;
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
 
-  }
-/*
   // gets the capacitor.Preferences in the format of a list of numbers
   getPreferences(): number[]{
     let preferences: number[] = [];
     for (let i = 0; i < 26; i++) {
-      const { value } = await Preferences.get({ key: 'name' });
       Preferences.get({ key: 'a' + i }).then(res => {
-        //preferences.push(Number(res.value));
         preferences.push(Number(res.value));
-        console.log(Number(res.value), "I'm getting preferences here");
+        //console.log(Number(res.value), "I'm getting preferences here");
       });
     }
 
@@ -130,53 +109,33 @@ export class SearchService {
     return preferences;
 
   }
-  */
-
   
 
-  async updatePreferencesWithworkoutHistory(workoutHistory: workoutReportType[]){
-    let preferences = this.getPreferences();
-
-    preferences.then(res => {
-      for (let workout of workoutHistory) {
-        res[lookUpTable[workout.workout.type]] += workout.likeability; // * workout.duration
-        res[lookUpTable[workout.workout.muscle]] += workout.likeability; // * workout.duration
-        res[lookUpTable[workout.workout.difficulty]] += workout.likeability; // * workout.duration
-      }
-
-      // Maybe also normalize the values if they are too large.
-
-      console.log(res);
-
-      this.setPreferences(res);
-
-      console.log(this.getPreferences(), "Inside the function");
-    });
-
-  }
-  
-/*
   updatePreferencesWithworkoutHistory(workoutHistory: workoutReportType[]){
     let preferences: number[] = [];
-    preferences = this.getPreferences();
-    console.log(this.getPreferences().length, "Testing length");
-    console.log(this.getPreferences(), "Not using a let");
-    console.log(preferences, "Using a let");
-    for (let workout of workoutHistory) {
-      preferences[lookUpTable[workout.workout.type]] += workout.likeability; // * workout.duration
-      preferences[lookUpTable[workout.workout.muscle]] += workout.likeability; // * workout.duration
-      preferences[lookUpTable[workout.workout.difficulty]] += workout.likeability; // * workout.duration
-    }
 
-      // Maybe also normalize the values if they are too large.
+    (async () => { 
+      preferences = this.getPreferences();
+      //console.log('before delay')
 
-      console.log(preferences, "Inside the function 1");
+      await this.delay(1000);
+      for (let workout of workoutHistory) {
+        preferences[lookUpTable[workout.workout.type]] += workout.likeability; // * workout.duration
+        preferences[lookUpTable[workout.workout.muscle]] += workout.likeability; // * workout.duration
+        preferences[lookUpTable[workout.workout.difficulty]] += workout.likeability; // * workout.duration
+      }
+      //console.log('after delay');
+
+      //console.log(preferences, "Inside the function 1");
 
       this.setPreferences(preferences);
 
-      console.log(this.getPreferences(), "Inside the function 2");
+      //console.log(this.getPreferences(), "Inside the function 2");
+    })();
+
+      // Maybe also normalize the values if they are too large.
   }
-*/
+
 
 // This is a helper function that gives cardio workouts more weights if the weather is good (true)
   ModifyPreferencesWithWeather(weather: boolean, preferences: number[]): number[] {
@@ -200,44 +159,8 @@ export class SearchService {
     var similarity = (dotproduct)/((mA)*(mB))
     return similarity;
   }
-
-// Uses best match algorithm to get top K workouts (returning their indexes)
-// workoutList is a list of the names of all 
-// If weather is good, then weather = true
-  async bestMatch(workoutList: workoutType[], weather: boolean, K: number): Promise<number[]> {
-    let workoutListVector: number[][] = [];
-
-    // Create a vector for the workout list.
-    for (let i = 0; i < workoutList.length; i++){
-      workoutListVector.push([]);
-      for (let j = 0; j < 26; j++)
-        workoutListVector[i].push(0);
-      workoutListVector[i][lookUpTable[workoutList[i].type]] = Max;
-      workoutListVector[i][lookUpTable[workoutList[i].muscle]] = Max;
-      workoutListVector[i][lookUpTable[workoutList[i].difficulty]] = Max;
-
-      // also push the index to make sorting easier.
-      workoutListVector[i].push(i);
-    }
-
-    // Get the vector of the user preferences.
-    let preferences = this.getPreferences();
-    let result: number[] = [];
-
-    preferences.then(res => {
-      res = this.ModifyPreferencesWithWeather(weather, res);
-      
-      // sort the workoutListVector based on similarity with the preferences vector
-      let sorted: number[][] = workoutListVector.sort((x, y) => this.cosineSimilarity(y, res) - this.cosineSimilarity(x, res));
-      for (let i = 0; i < K; i++)
-        result.push(sorted[i][26]);
-    });
-
-    return result;
-
-  }
   
-/*
+
   // Uses best match algorithm to get top K workouts (returning their indexes)
 // workoutList is a list of the names of all 
 // If weather is good, then weather = true
@@ -257,20 +180,33 @@ bestMatch(workoutList: workoutType[], weather: boolean, K: number): number[]{
     workoutListVector[i].push(i);
   }
 
-  // Get the vector of the user preferences.
-  let preferences = this.getPreferences();
-  let result: number[] = [];
+  var ans: number[] = [];
+
+  (async (): Promise<number[]> => { 
+    let preferences = this.getPreferences();
+
+    await this.delay(1000);
+
+    // Get the vector of the user preferences.
+    let result: number[] = [];
 
     preferences = this.ModifyPreferencesWithWeather(weather, preferences);
-    
+  
     // sort the workoutListVector based on similarity with the preferences vector
     let sorted: number[][] = workoutListVector.sort((x, y) => this.cosineSimilarity(y, preferences) - this.cosineSimilarity(x, preferences));
     for (let i = 0; i < K; i++)
       result.push(sorted[i][26]);
 
-  return result;
+    return result;
 
-}*/
+    })().then(res => {ans = res});
+
+  for (let i = 0; i < 3e9; i++); // to waste some time...
+  
+  return ans;
+  
+
+}
   
 
   testPreferences(){
@@ -288,9 +224,25 @@ bestMatch(workoutList: workoutType[], weather: boolean, K: number): number[]{
     workoutHistory.push({workout: {type: 'stretching', muscle: 'neck', difficulty: 'expert'}, likeability: 2});
     workoutHistory.push({workout: {type: 'stretching', muscle: 'lats', difficulty: 'intermediate'}, likeability: 1});
 
-    console.log("I'm calling the function.");
-    this.updatePreferencesWithworkoutHistory(workoutHistory);
+    (async () => { 
+      
+      console.log('before delay outside the function');
+      console.log("I'm calling the function.");
+      this.updatePreferencesWithworkoutHistory(workoutHistory);
+
+      await this.delay(1000);
+
+
     console.log(this.getPreferences(), "outside the function");
+      
+      console.log('after delay outside the function');
+
+    })();
+
+    for (let i = 0; i < 6e9; i++);
+
+    
+    
     
     
   }
