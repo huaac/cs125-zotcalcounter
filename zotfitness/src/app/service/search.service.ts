@@ -111,7 +111,7 @@ export class SearchService {
   }
   
 
-  updatePreferencesWithworkoutHistory(workoutHistory: workoutReportType[]){
+  updatePreferencesWithworkoutHistory(workoutHistory: workoutReportType){
     let preferences: number[] = [];
 
     (async () => { 
@@ -119,11 +119,9 @@ export class SearchService {
       //console.log('before delay')
 
       await this.delay(1000);
-      for (let workout of workoutHistory) {
-        preferences[lookUpTable[workout.workout.type]] += workout.likeability; // * workout.duration
-        preferences[lookUpTable[workout.workout.muscle]] += workout.likeability; // * workout.duration
-        preferences[lookUpTable[workout.workout.difficulty]] += workout.likeability; // * workout.duration
-      }
+        preferences[lookUpTable[workoutHistory.workout.type]] += workoutHistory.likeability; // * workout.duration
+        preferences[lookUpTable[workoutHistory.workout.muscle]] += workoutHistory.likeability; // * workout.duration
+        preferences[lookUpTable[workoutHistory.workout.difficulty]] += workoutHistory.likeability; // * workout.duration
       //console.log('after delay');
 
       //console.log(preferences, "Inside the function 1");
@@ -216,6 +214,8 @@ bestMatch(workoutList: workoutType[], weather: boolean, K: number): number[]{
     this.setPreferences(random);
     //console.log(this.getPreferences());
 
+    /*
+
     
     let workoutHistory: workoutReportType[] = [];
     workoutHistory.push({workout: {type: 'cardio', muscle: 'abdominals', difficulty: 'beginner'}, likeability: 5});
@@ -241,7 +241,9 @@ bestMatch(workoutList: workoutType[], weather: boolean, K: number): number[]{
 
     for (let i = 0; i < 6e9; i++);
 
-    
+    */
+
+
     
     
     
