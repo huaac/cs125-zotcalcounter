@@ -13,13 +13,13 @@ export interface ApiResult {
   instructions: string;
 }
 
-type workoutType = {
+export type workoutType = {
   type: string;
   muscle: string;
   difficulty: string;
 };
 
-type workoutReportType = {
+export type workoutReportType = {
   workout: workoutType;
   //duration: number;
   likeability: number;
@@ -82,7 +82,6 @@ export class SearchService {
         value: preferences[i].toString()
       })
     }
-    
   }
 
   checkName = async (index: string) => {

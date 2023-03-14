@@ -11,25 +11,30 @@
     </div>
     <form>
     <!-- EXERCISE ASK -->
-      <p><label for="exercise">What Exercise did you do?</label></p><br> <!-- this needs to be a selection eventually -->
-      <textarea input [(ngModel)]="exerciseCategory" id="checkinExercise" name="checkinExercise" rows="4" cols="10"></textarea>
+      <p><label for="exercise">What Exercise did you do?</label></p> <!-- this needs to be a selection eventually -->
+      <textarea input [(ngModel)]="exerciseCategory" id="checkinExercise" name="checkinExercise" rows="2" cols="40"></textarea>
 
       <br><br>
-      <p><label for="muscles">Muscle Focus:</label></p>
       <div class="ion-text-center">
         <ion-list>
           <ion-item>
             <!-- RATING ASK -->
+            <p><label for="muscles">How would you rate this exercise?</label></p>
             <ion-range (ionChange)="ratingSelect($event)" [ticks]="true" [snaps]="true" [min]="0" [max]="5"></ion-range>
-
-          <!-- DURATION ASK -->
-          <p><label for="duration">How long did you exercise? Please respond in the number of minutes (i/e "60" for an hour)</label></p><br>
-          <ion-input (ionChange)="durationSelect($event)" type="minutes" placeholder="# Minutes"></ion-input>
+          </ion-item>
+          <ion-item>
+            <!-- DURATION ASK -->
+            <p><label for="duration">How long did you exercise?</label></p>
+            <ion-input (ionChange)="durationSelect($event)" type="minutes" placeholder=" # Minutes"></ion-input>
           </ion-item>
         </ion-list>
       </div>
 
-      <br><br><button class="btn" (click)="onCheckinClick()" type="submit">Check In</button>
+      <!--<br><br><button class="btn" (click)="onCheckinClick()" type="submit">Check In</button>-->
+      <ion-button (click)="onCheckinClick()"
+        type="submit" style="background: white; border: 1px solid black; border-radius: 3px; height: 30px; position: relative;">
+        Checkin
+      </ion-button>
     </form>
   </div>
 </ion-content>

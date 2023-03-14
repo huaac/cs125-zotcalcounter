@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router'; //added
 import { Preferences } from '@capacitor/preferences'; //added
+import {workoutType, workoutReportType, SearchService} from '../service/search.service'
+import { AlertController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-checkin',
@@ -13,27 +16,62 @@ export class CheckinPage implements OnInit {
   exerciseCategory:string = "";
   ratingCategory:string = "";
   durationCategory:string = "";
+  invalidName:boolean = false;
 
-  constructor(private router:Router) { }
+  constructor(private router:Router, private searchService: SearchService, private alertController: AlertController) { }
 
   ngOnInit() {
   }
 
-  onCheckinClick() {
+  async onCheckinClick() {
     this.setExercise();
     this.setRating();
     this.setDuration();
 
-    //this.router.navigateByUrl('/checkin');
+    // call yunfan's function to properly store exercise data
 
-    //this.setExercise();
-    //this.setRating();
-    //this.setDuration();
+    // call from api to get data from name of exercise and use to make params
+    let param = "name=" + this.exerciseCategory.toLowerCase();
+    this.searchService.getMuscleWorkouts(param).subscribe(
+      async res => {
+        // if the name does not exist (aka improper input res[0] not exist) then say error
+        console.log(res[0]);
+        if(!res[0]) {
+          this.presentAlert();
+        } 
+        else{
+          const workoutT: workoutType = {
+            type: res[0].type,
+            muscle: res[0].muscle,
+            difficulty: res[0].difficulty
+          };
+
+          const workoutRT: workoutReportType = {
+            workout: workoutT,
+            likeability: Number(this.ratingCategory)
+          };
+
+          this.searchService.updatePreferencesWithworkoutHistory(workoutRT);
+          this.router.navigateByUrl('/history');
+        }
+      }
+    );
+  }
+
+  async presentAlert(){
+    let a = await this.alertController.create({
+      header: 'Invalid Exercise Type',
+      subHeader: 'This exercise does not exist',
+      message: 'Please check the spelling of the exercise.',
+      buttons: ['OK'],
+    });
+
+    await a.present();
   }
 
   // event handler that updates exercise whenever user selects a muscle
   ratingSelect(ev: Event){
-    this.exerciseCategory = (ev.target as HTMLInputElement).value;
+    this.ratingCategory = (ev.target as HTMLInputElement).value;
   }
 
   // event handler that updates exercise whenever user selects a muscle

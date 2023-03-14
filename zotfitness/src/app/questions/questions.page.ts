@@ -13,8 +13,8 @@ export class QuestionsPage implements OnInit {
   goalCategory:string = "";
   muscleCategory:string = "";
 
-  public muscles:string[] = ["Abdominals", "Abductors", "Calves", "Chest", "Forearms",
-    "Glutes", "Hamstrings", "Lats", "Lowerback", "Middleback", "Quadriceps",
+  public muscles:string[] = ["Abdominals", "Abductors", "Adductors", "Biceps", "Calves", "Chest", "Forearms",
+    "Glutes", "Hamstrings", "Lats", "Lowerback", "Middleback", "Neck", "Quadriceps",
     "Traps", "Tripceps"];
 
   constructor(private router:Router) { }
