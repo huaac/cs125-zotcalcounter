@@ -9,7 +9,6 @@
   <input type="number" id="workingHoursInput" (input)="onInputChange($event)">
 </div>
 
-
 <ion-content>
   <ion-card>
     <ion-card-content>
@@ -91,23 +90,32 @@
         <div class="day"style="width: 30px;height: 30px;font-size:25px;margin: 10px;">{{myVariable}}</div>
         <div class="day"style="width: 30px;height: 30px;font-size:25px;margin: 10px;">{{myVariable}}</div>
       </div>
-      <p>If you finished this workout plan, please enter how many days you kept your plan</p>
+      
       <ion-item>
-        <ion-button (click)="changePage()"
+        <ion-button
           style="background: white; border: 1px solid black; border-radius: 3px; height: 30px; position: relative;">
           Checkin
         </ion-button>
       </ion-item>
+
+      <div>
+        <label for="myVariable2Input" style="color: red">After finishing the exercise, please input how many days you actually kept your plan during the month</label>
+        <input type="number" id="myVariable2Input" #myVariable2Input>
+        <button (click)="onMyVariable2ButtonClick(myVariable2Input.value)"
+                style="background-color: #4CAF50; color: white; border: none; padding: 8px 16px; font-size: 14px; cursor: pointer; margin-left: 5px;">
+          Submit
+        </button>
+      </div>
       <p>Previous Workouts:</p>
       <ion-list>
         <ion-item>
-          <ion-label>Workout 1</ion-label>
+          <ion-label>You worked {{myVariable2}} days, totaling to {{totalMinutes}} hours</ion-label>
         </ion-item>
         <ion-item>
-          <ion-label>Workout 2</ion-label>
+          <ion-label>You worked {{myVariable2_1}} days, totaling to {{totalMinutes1}} hours</ion-label>
         </ion-item>
         <ion-item>
-          <ion-label>Workout 3</ion-label>
+          <ion-label>You worked {{myVariable2_2}} days, totaling to {{totalMinutes2}} hours</ion-label>
         </ion-item>
       </ion-list>
     </ion-card-content>
