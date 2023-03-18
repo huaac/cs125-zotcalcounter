@@ -91,7 +91,7 @@
         <div class="day"style="width: 30px;height: 30px;font-size:25px;margin: 10px;">{{myVariable}}</div>
         <div class="day"style="width: 30px;height: 30px;font-size:25px;margin: 10px;">{{myVariable}}</div>
       </div>
-      <p>If you finished this workout plan, please enter how many days you kept your plan</p>
+      <p style="color:red">After you finished this workout plan, please click the "checkin" button below to enter your workout details</p>
       <ion-item>
         <ion-button (click)="changePage()"
           style="background: white; border: 1px solid black; border-radius: 3px; height: 30px; position: relative;">
@@ -101,13 +101,13 @@
       <p>Previous Workouts:</p>
       <ion-list>
         <ion-item>
-          <ion-label>Workout 1</ion-label>
+          <ion-label>Exercise: {{Exercise}},{{Duration}} minutes total,rating given: {{Rating}}</ion-label>
         </ion-item>
         <ion-item>
-          <ion-label>Workout 2</ion-label>
+          <ion-label>Exercise: {{Exercise1}},{{Duration1}} minutes total,rating given: {{Rating1}}</ion-label>
         </ion-item>
         <ion-item>
-          <ion-label>Workout 3</ion-label>
+          <ion-label>Exercise: {{Exercise2}},{{Duration2}} minutes total,rating given: {{Rating2}}</ion-label>
         </ion-item>
       </ion-list>
     </ion-card-content>
