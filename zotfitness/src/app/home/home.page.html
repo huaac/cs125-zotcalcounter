@@ -21,7 +21,7 @@
 <!--    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>-->
     <div>
       <div class="loginText">
-        <p style="color: #FFC72C; font-size: 25px; margin-bottom: 20px;">Login</p>
+        <p style="color: #FFC72C; font-size: 25px; margin-bottom: 20px;">{{pageState}}</p>
       </div>
       <div>
         <label for="Name">Username: </label>
@@ -39,7 +39,10 @@
     <div>
 <!--       <a href="" class="btn btn-primary" style="background-color: #527769;" role="button""><h3>Login</h3></a>-->
 <!--      <a href="questions.html">Login</a>-->
-       <button class="btn" (click)="onLoginClick()" type="submit">Login</button>
+       <button class="btn" (click)="onLoginClick()" type="submit">{{buttonState}}</button>
+    </div>
+    <div>
+       <button class="astext" (click)="changesStates()" type="submit">{{switchingStates}}</button>
     </div>
   </div>
 </ion-content>
