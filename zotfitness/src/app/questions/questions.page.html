@@ -6,7 +6,7 @@
 
 <ion-content [fullscreen]="true">
   <div id = "container">
-    <div class="profileText">
+    <div class="profileText center">
         <p style="color: #FFC72C; font-size: 25px; margin-bottom: 20px;">Profile</p>
     </div>
 
@@ -27,7 +27,10 @@
         </ion-list>
       </div>
 
-      <br><br><button class="btn" (click)="onQuestionsClick()" type="submit">Submit</button>
+      <br><br>
+      <div class="center">
+        <button class="btn" (click)="onQuestionsClick()" type="submit">Submit</button>
+      </div>
     </form>
   </div>
 </ion-content>

@@ -32,7 +32,6 @@ export class SearchPage implements OnInit {
     "middle_back", "neck", "quadriceps", "traps", "triceps"];
 
 
-//   imageBaseUrl = environment.images; // no images atm...
 
   constructor(private searchService: SearchService, private router:Router, private loadingCtrl: LoadingController, public modalCtrl:ModalController) { }
 
@@ -44,13 +43,16 @@ export class SearchPage implements OnInit {
     this.getWeatherData();
   }
 
+  //redirects to history page
   onHistoryClick() {
     this.router.navigateByUrl('/history');
   }
+  //redirects to questions page
   onProfileClick() {
     this.router.navigateByUrl('/questions');
   }
 
+  //if there are arguments in the search, the api call to display workouts, otherwise, display personalized workouts[]
   onSearchClickNewWorkouts() {
     if (this.searchTerm == "") {
       this.searchService.bestMatch(this.currentWeather >= 70, 10).then(res => {this.workouts = res});
@@ -63,6 +65,7 @@ export class SearchPage implements OnInit {
       });
   }
 
+// //loads all the workouts into the variable workouts[]
   async loadWorkouts(parameters: string, event?: InfiniteScrollCustomEvent) {
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
@@ -128,6 +131,7 @@ export class SearchPage implements OnInit {
       return text_param;}
   }
 
+// plugs in weather variable with the current weather by calling the api
   async getWeatherData(){
     this.searchService.getWeatherData('latitude=33.67&longitude=-117.82&hourly=temperature_2m,apparent_temperature&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FLos_Angeles').subscribe(
     (inf) => {

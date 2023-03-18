@@ -34,6 +34,12 @@ export class HistoryComponent implements OnInit, OnDestroy {
       this.getCheckinRating();
     }, 1000);
   }
+
+  //redirects to the Search Page
+  onHistoryClick() {
+    this.router.navigateByUrl('/search');
+  }
+
   //clearinterval so that the portion above wont cause memory leakage
   ngOnDestroy() {
     clearInterval(this.checkInterval);

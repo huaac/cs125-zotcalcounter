@@ -1,16 +1,17 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title style="font-size: 50px;">History</ion-title>
+    <ion-title>History</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<div>
-  <label for="workingHoursInput">Please input your desire total working hours within this month:</label>
-  <input type="number" id="workingHoursInput" (input)="onInputChange($event)">
-</div>
-
-
 <ion-content>
+  <div>
+        <button class="btn" (click)="onHistoryClick()" type="submit">Search</button>
+      </div>
+  <div style="margin-top:15px; margin-bottom:15px;">
+    <label for="workingHoursInput">Please input your desire total working hours within this month:</label>
+    <input type="number" id="workingHoursInput" (input)="onInputChange($event)">
+  </div>
   <ion-card>
     <ion-card-content>
       <div style="text-align:center;font-size:36px;margin-bottom:20px; color: #FFC72C;">March</div>
@@ -91,18 +92,15 @@
         <div class="day"style="width: 30px;height: 30px;font-size:25px;margin: 10px;">{{myVariable}}</div>
         <div class="day"style="width: 30px;height: 30px;font-size:25px;margin: 10px;">{{myVariable}}</div>
       </div>
-      <p style="color: #FFC72C">After you finished a workout, please click the "checkin" button below to enter your workout details</p>
-      <ion-item>
-        <ion-button (click)="changePage()"
-          style="background: white; border: 1px solid black; border-radius: 3px; height: 30px; position: relative;">
-          Checkin
-        </ion-button>
-      </ion-item>
+      <p style="color: #FFC72C;">After you finished a workout, please click the "checkin" button below to enter your workout details</p>
+      <div class="center">
+        <button class="btn" (click)="changePage()">Checkin</button>
+      </div>
       <p>Previous Workouts:</p>
-      
+
       <ion-list>
         <ion-item *ngIf="(Exercise !== '-1') || (Duration !== -1) || (Rating !== '-1')">
-          <ion-label><div style="white-space: pre-wrap;">Exercise: {{Exercise}}, {{Duration}} minutes total, rating given: {{Rating}}</div></ion-label>
+          <ion-label><div style="white-space: pre-wrap;"> Exercise: {{Exercise}}, {{Duration}} minutes total, rating given: {{Rating}}</div></ion-label>
         </ion-item>
         <ion-item *ngIf="(Exercise1 !== '-1') || (Duration1 !== -1) || (Rating1 !== '-1')">
           <ion-label><div style="white-space: pre-wrap;">Exercise: {{Exercise1}}, {{Duration1}} minutes total, rating given: {{Rating1}}</div></ion-label>
@@ -140,7 +138,7 @@
         <ion-item *ngIf="(Exercise12 !== '-1') || (Duration12 !== -1) || (Rating12 !== '-1')">
           <ion-label><div style="white-space: pre-wrap;">Exercise: {{Exercise12}}, {{Duration12}} minutes total, rating given: {{Rating12}}</div></ion-label>
         </ion-item>
-      </ion-list>          
+      </ion-list>
     </ion-card-content>
   </ion-card>
 </ion-content>
