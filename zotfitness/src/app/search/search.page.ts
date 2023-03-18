@@ -38,8 +38,10 @@ export class SearchPage implements OnInit {
 
   ngOnInit() {
 //     this.searchService.getMuscleWorkouts(); // on initialization of page, print bicep data
-    this.loadWorkouts("");
-//     this.getWeatherData();
+    this.searchService.getAllWorkouts();
+    //this.loadWorkouts("");
+    this.onSearchClickNewWorkouts()
+    this.getWeatherData();
   }
 
   onHistoryClick() {
@@ -50,6 +52,9 @@ export class SearchPage implements OnInit {
   }
 
   onSearchClickNewWorkouts() {
+    if (this.searchTerm == "") {
+      this.searchService.bestMatch(this.currentWeather >= 70, 10).then(res => {this.workouts = res});
+    }
     let split_text = this.searchTerm.split(", ");
     let text_paramm = this.buildParam(split_text);
     text_paramm.then(
@@ -134,8 +139,6 @@ export class SearchPage implements OnInit {
 
 // calls the modal that presents the workout description
   async initWorkoutDescription(name: string) {
-
-    this.searchService.testPreferences();
 
     let param = 'name=' + name; //'name=' + name of workout
 

@@ -33,6 +33,10 @@ const lookUpTable: MapType = {'cardio': 0, 'olympic_weightlifting': 1, 'plyometr
 'abdominals': 7, 'abductors': 8, 'adductors': 9, 'biceps': 10, 'calves': 11, 'chest': 12, 'forearms': 13, 'glutes': 14, 'hamstrings': 15, 'lats': 16,
 'lower_back': 17, 'middle_back': 18, 'neck': 19, 'quadriceps': 20, 'traps': 21, 'triceps': 22, 'beginner': 23, 'intermediate': 24, 'expert': 25};
 
+const workoutParameters: string[] = ['cardio', 'olympic_weightlifting', 'plyometrics', 'powerlifting', 'strength', 'stretching', 'strongman', 'abdominals',
+'abductors', 'adductors', 'biceps', 'calves', 'chest', 'forearms', 'glutes', 'hamstrings', 'lats', 'lower_back', 'middle_back', 'neck', 'quadriceps', 
+'traps', 'triceps', 'beginner', 'intermediate', 'expert'];
+
 const Max = 10000;
 
 
@@ -74,20 +78,15 @@ export class SearchService {
     return this.sendRequestToExpressWeather(parameters);
   }
   
-  setPreferences(preferences: number[]){
+  async setPreferences(preferences: number[]){
     for (let i = 0; i < 26; i++) {
       let p = 0;
-      Preferences.set({
+      await Preferences.set({
         key: 'a' + i,
         value: preferences[i].toString()
       })
     }
   }
-
-  checkName = async (index: string) => {
-    const { value } = await Preferences.get({ key: index });
-    console.log(`Hello ${value}!`);
-  };
 
 
   delay(ms: number) {
@@ -95,7 +94,7 @@ export class SearchService {
 }
 
   // gets the capacitor.Preferences in the format of a list of numbers
-  getPreferences(): number[]{
+  async getPreferences(): Promise<number[]>{
     let preferences: number[] = [];
     for (let i = 0; i < 26; i++) {
       Preferences.get({ key: 'a' + i }).then(res => {
@@ -104,20 +103,17 @@ export class SearchService {
       });
     }
 
-    console.log(typeof preferences, preferences.length, "Testing getGetPreferences");
     return preferences;
 
   }
   
 
-  updatePreferencesWithworkoutHistory(workoutHistory: workoutReportType){
+  async updatePreferencesWithworkoutHistory(workoutHistory: workoutReportType){
     let preferences: number[] = [];
 
-    (async () => { 
-      preferences = this.getPreferences();
+      await this.getPreferences().then(res => {preferences = res});
       //console.log('before delay')
 
-      await this.delay(1000);
         preferences[lookUpTable[workoutHistory.workout.type]] += workoutHistory.likeability; // * workout.duration
         preferences[lookUpTable[workoutHistory.workout.muscle]] += workoutHistory.likeability; // * workout.duration
         preferences[lookUpTable[workoutHistory.workout.difficulty]] += workoutHistory.likeability; // * workout.duration
@@ -125,10 +121,9 @@ export class SearchService {
 
       //console.log(preferences, "Inside the function 1");
 
-      this.setPreferences(preferences);
+      await this.setPreferences(preferences);
 
       //console.log(this.getPreferences(), "Inside the function 2");
-    })();
 
       // Maybe also normalize the values if they are too large.
   }
@@ -161,8 +156,25 @@ export class SearchService {
   // Uses best match algorithm to get top K workouts (returning their indexes)
 // workoutList is a list of the names of all 
 // If weather is good, then weather = true
-bestMatch(workoutList: workoutType[], weather: boolean, K: number): number[]{
+async bestMatch(weather: boolean, K: number): Promise<string[]>{
   let workoutListVector: number[][] = [];
+  let workoutList: ApiResult[] = [];
+
+  let workoutListlength: number = 0;
+  await Preferences.get({ key: "workoutListLength"}).then(res => {workoutListlength = Number(res.value)});
+
+  // generate the workoutList
+  for (let i = 0; i < workoutListlength; i++) {
+    let name: string = '', type: string = '', muscle: string = '', equipement: string = '', difficulty: string = '', instructions: string = '';
+    await Preferences.get({ key: (i * 6 + 0).toString()}).then(res => {if (res.value != null) name = res.value});
+    await Preferences.get({ key: (i * 6 + 1).toString()}).then(res => {if (res.value != null) type = res.value});
+    await Preferences.get({ key: (i * 6 + 2).toString()}).then(res => {if (res.value != null) muscle = res.value});
+    await Preferences.get({ key: (i * 6 + 3).toString()}).then(res => {if (res.value != null) equipement = res.value});
+    await Preferences.get({ key: (i * 6 + 4).toString()}).then(res => {if (res.value != null) difficulty = res.value});
+    await Preferences.get({ key: (i * 6 + 5).toString()}).then(res => {if (res.value != null) instructions = res.value});
+
+    workoutList.push({"name": name, "type": type, "muscle": muscle, "equipement": equipement, "difficulty": difficulty, "instructions": instructions});
+  }
 
   // Create a vector for the workout list.
   for (let i = 0; i < workoutList.length; i++){
@@ -173,74 +185,128 @@ bestMatch(workoutList: workoutType[], weather: boolean, K: number): number[]{
     workoutListVector[i][lookUpTable[workoutList[i].muscle]] = Max;
     workoutListVector[i][lookUpTable[workoutList[i].difficulty]] = Max;
 
-    // also push the index to make sorting easier.
+    // also push the name to make sorting easier.
     workoutListVector[i].push(i);
   }
 
-  var ans: number[] = [];
+  let preferences = await this.getPreferences();
 
-  (async (): Promise<number[]> => { 
-    let preferences = this.getPreferences();
+  await this.delay(1000);
 
-    await this.delay(1000);
+  // Get the vector of the user preferences.
+  let result: string[] = [];
 
-    // Get the vector of the user preferences.
-    let result: number[] = [];
-
-    preferences = this.ModifyPreferencesWithWeather(weather, preferences);
+  preferences = this.ModifyPreferencesWithWeather(weather, preferences);
   
-    // sort the workoutListVector based on similarity with the preferences vector
-    let sorted: number[][] = workoutListVector.sort((x, y) => this.cosineSimilarity(y, preferences) - this.cosineSimilarity(x, preferences));
-    for (let i = 0; i < K; i++)
-      result.push(sorted[i][26]);
+  // sort the workoutListVector based on similarity with the preferences vector
+  let sorted: number[][] = workoutListVector.sort((x, y) => this.cosineSimilarity(y, preferences) - this.cosineSimilarity(x, preferences));
+  for (let i = 0; i < K; i++)
+    await Preferences.get({ key: (sorted[i][26] * 6 + 0).toString()}).then(res => {if (res.value != null) result.push(res.value)});
 
-    return result;
-
-    })().then(res => {ans = res});
-
-  for (let i = 0; i < 3e9; i++); // to waste some time...
+  return result;
   
-  return ans;
-  
-
 }
-  
 
-  testPreferences(){
+// Find a list of all workouts.
+async getAllWorkouts() {
+  let workoutList: ApiResult[] = [];
+
+  // Find brute force all tag combinations.
+  for (let i = 0; i < 7; i++) // 7
+    for (let j = 7; j < 23; j++) // 23
+      for (let k = 23; k < 26; k++) { // 26
+        await this.delay(100);
+        this.getMuscleWorkouts("type=" + workoutParameters[i] + "&muscle=" + workoutParameters[j] + "&difficulty=" + workoutParameters[k]).subscribe(
+           (res) => {
+             // for all of the results
+            for (let l = 0; l < res.length; l++) {
+              // for some wierd reasons there can be repeated workouts...
+              let repeated: boolean = false;
+              for (let m = 0; m < workoutList.length; m++)
+                if (res[l].name === workoutList[m].name)
+                  repeated = true;
+              if (repeated) continue;
+
+              let cur: ApiResult = {"name": res[l].name, "type": res[l].type, "muscle": res[l].muscle, "equipement": res[l].equipement,
+               "difficulty": res[l].difficulty, "instructions": res[l].instructions};
+              workoutList.push(cur);
+            }
+            
+           },
+           (err) => {
+           console.log(err);
+          }
+         );
+       }
+  
+  // set everything inside the preferences.
+  for (let i = 0; i < workoutList.length; i++) {
+    Preferences.set({
+      key: (i * 6 + 0).toString(),
+      value: workoutList[i].name
+    })
+
+    Preferences.set({
+      key: (i * 6 + 1).toString(),
+      value: workoutList[i].type
+    })
+
+    Preferences.set({
+      key: (i * 6 + 2).toString(),
+      value: workoutList[i].muscle
+    })
+
+    Preferences.set({
+      key: (i * 6 + 3).toString(),
+      value: workoutList[i].equipement
+    })
+
+    Preferences.set({
+      key: (i * 6 + 4).toString(),
+      value: workoutList[i].difficulty
+    })
+
+    Preferences.set({
+      key: (i * 6 + 5).toString(),
+      value: workoutList[i].instructions
+    })
+
+  }
+
+  // also set the length of workoutList
+  Preferences.set({
+    key: "workoutListLength",
+    value: workoutList.length.toString()
+  })
+    
+  
+}
+
+  async testPreferences(){
     let random: number[] = [];
     for (let i = 0; i < 26; i++)
       random[i] = 26 - i;
-    this.setPreferences(random);
-    //console.log(this.getPreferences());
+    await this.setPreferences(random);
+    console.log(await this.getPreferences());
 
-    /*
-
-    
     let workoutHistory: workoutReportType[] = [];
     workoutHistory.push({workout: {type: 'cardio', muscle: 'abdominals', difficulty: 'beginner'}, likeability: 5});
     workoutHistory.push({workout: {type: 'plyometrics', muscle: 'chest', difficulty: 'intermediate'}, likeability: 4});
     workoutHistory.push({workout: {type: 'strongman', muscle: 'chest', difficulty: 'intermediate'}, likeability: 3});
     workoutHistory.push({workout: {type: 'stretching', muscle: 'neck', difficulty: 'expert'}, likeability: 2});
     workoutHistory.push({workout: {type: 'stretching', muscle: 'lats', difficulty: 'intermediate'}, likeability: 1});
-
-    (async () => { 
       
-      console.log('before delay outside the function');
-      console.log("I'm calling the function.");
-      this.updatePreferencesWithworkoutHistory(workoutHistory);
+    console.log("I'm calling the function.");
+    await this.updatePreferencesWithworkoutHistory(workoutHistory[0]);
+    await this.updatePreferencesWithworkoutHistory(workoutHistory[1]);
+    await this.updatePreferencesWithworkoutHistory(workoutHistory[2]);
+    await this.updatePreferencesWithworkoutHistory(workoutHistory[3]);
+    await this.updatePreferencesWithworkoutHistory(workoutHistory[4]);
 
-      await this.delay(1000);
-
-
-    console.log(this.getPreferences(), "outside the function");
-      
-      console.log('after delay outside the function');
-
-    })();
-
-    for (let i = 0; i < 6e9; i++);
-
-    */
+    console.log(await this.getPreferences(), "outside the function");
+    
+    this.getAllWorkouts();
+    await this.bestMatch(true, 10).then(res => {console.log(res)});
 
 
     
