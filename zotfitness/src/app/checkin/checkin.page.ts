@@ -28,8 +28,6 @@ export class CheckinPage implements OnInit {
     this.setRating();
     this.setDuration();
 
-    // call yunfan's function to properly store exercise data
-
     // call from api to get data from name of exercise and use to make params
     let param = "name=" + this.exerciseCategory.toLowerCase();
     this.searchService.getMuscleWorkouts(param).subscribe(
@@ -38,8 +36,15 @@ export class CheckinPage implements OnInit {
         console.log(res[0]);
         if(!res[0]) {
           this.presentAlert();
-        } 
+        }
+        // the API normally returns whatever exercise includes the input, so this if statement makes sure
+        // the input is perfectly equal to the exercise name to make sure we know what the user needs
+        else if (res[0].name.toLowerCase() != this.exerciseCategory.toLowerCase()){
+          this.presentAlert();
+        }
+        // assuming the input is a proper exercise name, call yunfan's function to properly store exercise data
         else{
+          console.log(res[0].name);
           const workoutT: workoutType = {
             type: res[0].type,
             muscle: res[0].muscle,
