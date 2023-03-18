@@ -13,9 +13,9 @@ import { ModalController } from '@ionic/angular';
 })
 export class HistoryComponent implements OnInit, OnDestroy {
   myVariable: string = "0";
-  Duration: string = "0";
-  Duration1: string = "0";
-  Duration2: string = "0";
+  Duration: number = 0;
+  Duration1: number = 0;
+  Duration2: number = 0;
   Exercise: string = "0";
   Exercise1: string = "0";
   Exercise2: string = "0";
@@ -52,10 +52,10 @@ export class HistoryComponent implements OnInit, OnDestroy {
   }
 
   getCheckinDuration() {
-    const value = localStorage.getItem('CapacitorStorage.checkinDuration');
-    if (value && value !== this.Duration) {
+    const value: number = Number(localStorage.getItem('CapacitorStorage.checkinDuration'));
+    if (parseFloat((value/60).toFixed(1)) && parseFloat((value/60).toFixed(1)) !== this.Duration) {
       this.updateQueueValues();
-      this.Duration = value;
+      this.Duration = parseFloat((value/60).toFixed(1));
     }
   }
 
