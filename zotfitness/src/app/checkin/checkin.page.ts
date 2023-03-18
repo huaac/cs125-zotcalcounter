@@ -51,7 +51,7 @@ export class CheckinPage implements OnInit {
             likeability: Number(this.ratingCategory)
           };
 
-          this.searchService.updatePreferencesWithworkoutHistory(workoutRT);
+          await this.searchService.updatePreferencesWithworkoutHistory(workoutRT);
           this.router.navigateByUrl('/history');
         }
       }
