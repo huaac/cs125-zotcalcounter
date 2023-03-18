@@ -3,6 +3,14 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router'; //added
 import { Preferences } from '@capacitor/preferences'; //added
 
+type MapType = { 
+  [id: string]: number; 
+}
+
+const lookUpTable: MapType = {'cardio': 0, 'olympic_weightlifting': 1, 'plyometrics': 2, 'powerlifting': 3, 'strength': 4, 'stretching': 5, 'strongman': 6,
+'abdominals': 7, 'abductors': 8, 'adductors': 9, 'biceps': 10, 'calves': 11, 'chest': 12, 'forearms': 13, 'glutes': 14, 'hamstrings': 15, 'lats': 16,
+'lower_back': 17, 'middle_back': 18, 'neck': 19, 'quadriceps': 20, 'traps': 21, 'triceps': 22, 'beginner': 23, 'intermediate': 24, 'expert': 25};
+
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.page.html',
@@ -13,9 +21,9 @@ export class QuestionsPage implements OnInit {
   goalCategory:string = "";
   muscleCategory:string = "";
 
-  public muscles:string[] = ["Abdominals", "Abductors", "Adductors", "Biceps", "Calves", "Chest", "Forearms",
-    "Glutes", "Hamstrings", "Lats", "Lowerback", "Middleback", "Neck", "Quadriceps",
-    "Traps", "Tripceps"];
+  public muscles:string[] = ["abdominals", "abductors", "adductors", "biceps", "calves", "chest", "forearms",
+    "glutes", "hamstrings", "lats", "lowerback", "middleback", "neck", "quadriceps",
+    "traps", "tripceps"];
 
   constructor(private router:Router) { }
 
@@ -59,6 +67,17 @@ export class QuestionsPage implements OnInit {
   await Preferences.set({
     key: 'muscles',
     value: this.muscleCategory,
-  });
+  }); // should I keep this?
+
+  // For now I "set" instead of "add".
+  for (let i = 0; i < this.muscleCategory.length; i++) {
+    console.log(this.muscleCategory[i]);
+    await Preferences.set({
+      key: (-1 - lookUpTable[this.muscleCategory[i]]).toString(),
+      value: (15).toString()
+    });
+  }
+  
+
   };
 }

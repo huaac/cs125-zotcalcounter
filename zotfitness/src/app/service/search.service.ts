@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Preferences } from '@capacitor/preferences';
+//import { MapType } from '@angular/compiler';
 
 export interface ApiResult {
   name: string;
@@ -77,12 +78,23 @@ export class SearchService {
   getWeatherData(parameters: string):Observable<any>{
     return this.sendRequestToExpressWeather(parameters);
   }
+
+  async setPreferencesHelper(key: string, value: string){
+    await Preferences.set({
+      key: key,
+      value: value
+    })
+  }
+
+  async getPreferencesHelper(key: string){
+    return await Preferences.get({key: key});
+  }
   
   async setPreferences(preferences: number[]){
     for (let i = 0; i < 26; i++) {
       let p = 0;
       await Preferences.set({
-        key: 'a' + i,
+        key: (-1 - i).toString(),
         value: preferences[i].toString()
       })
     }
@@ -97,7 +109,7 @@ export class SearchService {
   async getPreferences(): Promise<number[]>{
     let preferences: number[] = [];
     for (let i = 0; i < 26; i++) {
-      Preferences.get({ key: 'a' + i }).then(res => {
+      await Preferences.get({ key: (-1 - i).toString() }).then(res => {
         preferences.push(Number(res.value));
         //console.log(Number(res.value), "I'm getting preferences here");
       });
@@ -176,6 +188,8 @@ async bestMatch(weather: boolean, K: number): Promise<string[]>{
     workoutList.push({"name": name, "type": type, "muscle": muscle, "equipement": equipement, "difficulty": difficulty, "instructions": instructions});
   }
 
+  console.log("List length", workoutList.length);
+
   // Create a vector for the workout list.
   for (let i = 0; i < workoutList.length; i++){
     workoutListVector.push([]);
@@ -191,6 +205,8 @@ async bestMatch(weather: boolean, K: number): Promise<string[]>{
 
   let preferences = await this.getPreferences();
 
+  console.log(preferences);
+
   await this.delay(1000);
 
   // Get the vector of the user preferences.
@@ -203,33 +219,48 @@ async bestMatch(weather: boolean, K: number): Promise<string[]>{
   for (let i = 0; i < K; i++)
     await Preferences.get({ key: (sorted[i][26] * 6 + 0).toString()}).then(res => {if (res.value != null) result.push(res.value)});
 
+  console.log(result);
+
   return result;
   
 }
 
 // Find a list of all workouts.
 async getAllWorkouts() {
+  
+  await Preferences.clear(); //!!!
   let workoutList: ApiResult[] = [];
+
+  let workoutName: MapType = {};
 
   // Find brute force all tag combinations.
   for (let i = 0; i < 7; i++) // 7
     for (let j = 7; j < 23; j++) // 23
       for (let k = 23; k < 26; k++) { // 26
+
+        //console.log("HELLO WORLD");
+
         await this.delay(100);
         this.getMuscleWorkouts("type=" + workoutParameters[i] + "&muscle=" + workoutParameters[j] + "&difficulty=" + workoutParameters[k]).subscribe(
            (res) => {
              // for all of the results
             for (let l = 0; l < res.length; l++) {
-              // for some wierd reasons there can be repeated workouts...
+              
+              /*
               let repeated: boolean = false;
               for (let m = 0; m < workoutList.length; m++)
                 if (res[l].name === workoutList[m].name)
                   repeated = true;
               if (repeated) continue;
+              */
+              
+              // for some wierd reasons there can be repeated workouts...
+              if (workoutName[res[l].name] != undefined) continue;
 
               let cur: ApiResult = {"name": res[l].name, "type": res[l].type, "muscle": res[l].muscle, "equipement": res[l].equipement,
                "difficulty": res[l].difficulty, "instructions": res[l].instructions};
               workoutList.push(cur);
+              workoutName[res[l].name] = 1;
             }
             
            },
@@ -238,45 +269,53 @@ async getAllWorkouts() {
           }
          );
        }
-  
+
   // set everything inside the preferences.
   for (let i = 0; i < workoutList.length; i++) {
-    Preferences.set({
+    await Preferences.set({
       key: (i * 6 + 0).toString(),
       value: workoutList[i].name
     })
 
-    Preferences.set({
+    await Preferences.set({
       key: (i * 6 + 1).toString(),
       value: workoutList[i].type
     })
 
-    Preferences.set({
+    await Preferences.set({
       key: (i * 6 + 2).toString(),
       value: workoutList[i].muscle
     })
 
-    Preferences.set({
+    await Preferences.set({
       key: (i * 6 + 3).toString(),
       value: workoutList[i].equipement
     })
 
-    Preferences.set({
+    await Preferences.set({
       key: (i * 6 + 4).toString(),
       value: workoutList[i].difficulty
     })
 
-    Preferences.set({
+    await Preferences.set({
       key: (i * 6 + 5).toString(),
       value: workoutList[i].instructions
     })
 
   }
 
+  console.log("??? length", workoutList.length);
+
   // also set the length of workoutList
-  Preferences.set({
+  await Preferences.set({
     key: "workoutListLength",
     value: workoutList.length.toString()
+  })
+
+  // If it is initialized there no need to initalize in the future.
+  await Preferences.set({
+    key: "initialized",
+    value: "yes"
   })
     
   

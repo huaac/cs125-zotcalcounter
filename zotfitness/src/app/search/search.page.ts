@@ -1,12 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 
-import { SearchService } from 'src/app/service/search.service'; // added
+import { SearchService} from 'src/app/service/search.service'; // added
 import { Router } from '@angular/router'; //added
 import { InfiniteScrollCustomEvent, LoadingController } from '@ionic/angular'; //added
 
 import { ModalController } from '@ionic/angular'; // added
 import { DescriptionPage } from 'src/app/description/description.page';
 import { Input, Injectable } from  '@angular/core';// added
+import { Preferences } from '@capacitor/preferences';
+import { lookup } from 'dns';
+
+export type MapType = { 
+  [id: string]: number; 
+}
+
+const lookUpTable: MapType = {'cardio': 0, 'olympic_weightlifting': 1, 'plyometrics': 2, 'powerlifting': 3, 'strength': 4, 'stretching': 5, 'strongman': 6,
+'abdominals': 7, 'abductors': 8, 'adductors': 9, 'biceps': 10, 'calves': 11, 'chest': 12, 'forearms': 13, 'glutes': 14, 'hamstrings': 15, 'lats': 16,
+'lower_back': 17, 'middle_back': 18, 'neck': 19, 'quadriceps': 20, 'traps': 21, 'triceps': 22, 'beginner': 23, 'intermediate': 24, 'expert': 25};
 
 
 // import { Output, EventEmitter } from '@angular/core'; //added
@@ -36,9 +46,13 @@ export class SearchPage implements OnInit {
 
   constructor(private searchService: SearchService, private router:Router, private loadingCtrl: LoadingController, public modalCtrl:ModalController) { }
 
-  ngOnInit() {
-//     this.searchService.getMuscleWorkouts(); // on initialization of page, print bicep data
-    this.searchService.getAllWorkouts();
+  async ngOnInit() {
+    let hasKeys: boolean = false;
+    await Preferences.keys().then(res => {hasKeys = res.keys.length > 0});
+
+    // Only initialize it at the first time (the Preferences is empty)
+    if (!hasKeys)
+      await this.searchService.getAllWorkouts();
     //this.loadWorkouts("");
     this.onSearchClickNewWorkouts()
     this.getWeatherData();
@@ -54,6 +68,8 @@ export class SearchPage implements OnInit {
   onSearchClickNewWorkouts() {
     if (this.searchTerm == "") {
       this.searchService.bestMatch(this.currentWeather >= 70, 10).then(res => {this.workouts = res});
+      return;
+      // ???
     }
     let split_text = this.searchTerm.split(", ");
     let text_paramm = this.buildParam(split_text);
@@ -104,6 +120,15 @@ export class SearchPage implements OnInit {
     else {
       for(let x = 0; x < text.length; x++)
       {
+        // Update the user preferences as the user seems to be interested in this parameter.
+        if (text[x] != '') {
+          let cur: number = 0;
+          await this.searchService.getPreferencesHelper((-1 - lookUpTable[text[x]]).toString()).then(res => {cur = Number(res.value)});
+          console.log(text[x], cur, lookUpTable[text[x]], (-1 - lookUpTable[text[x]]).toString());
+          cur += 5;
+          await this.searchService.setPreferencesHelper((-1 - lookUpTable[text[x]]).toString(), cur.toString());
+        }
+
         if(this.typeParam.includes(text[x]) && type_bool == false) {
           type_bool = true;
           text_param += "type=" + text[x];}
@@ -123,7 +148,8 @@ export class SearchPage implements OnInit {
           muscle_bool = true;
           text_param += "muscle=middle_back";}
 
-        if (text_param != "") {text_param += "&";}
+        if (text_param != "") {
+          text_param += "&";}
       }
       return text_param;}
   }
