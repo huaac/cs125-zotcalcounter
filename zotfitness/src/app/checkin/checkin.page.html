@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>checkin</ion-title>
+    <ion-title>Check-In</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div id = "container">
     <div class="profileText">
-        <p style="color: #FFC72C; font-size: 25px; margin-bottom: 20px;">Check In Questions</p>
+        <p class="center" style="color: #FFC72C; font-size: 25px; margin-bottom: 20px;">Check In Questions</p>
     </div>
     <form>
     <!-- EXERCISE ASK -->
@@ -31,10 +31,12 @@
       </div>
 
       <!--<br><br><button class="btn" (click)="onCheckinClick()" type="submit">Check In</button>-->
-      <ion-button (click)="onCheckinClick()"
-        type="submit" style="background: white; border: 1px solid black; border-radius: 3px; height: 30px; position: relative;">
+      <div class="center">
+        <button (click)="onCheckinClick()"
+        type="submit" class="btn">
         Checkin
-      </ion-button>
+      </button>
+      </div>
     </form>
   </div>
 </ion-content>

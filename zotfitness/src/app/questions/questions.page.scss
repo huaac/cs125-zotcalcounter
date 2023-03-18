@@ -25,12 +25,20 @@
   text-align: center;
 }
 
+// .center {
+//   margin: auto;
+//   text-align: center;
+//   width: 50%;
+//   //border: 3px solid green;
+//   padding: 10px;
+// }
 .center {
   margin: auto;
-  text-align: center;
-  width: 50%;
   //border: 3px solid green;
   padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn {
