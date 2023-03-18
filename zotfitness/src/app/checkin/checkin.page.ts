@@ -16,13 +16,13 @@ export class CheckinPage implements OnInit {
   exerciseCategory:string = "";
   ratingCategory:string = "";
   durationCategory:string = "";
-  invalidName:boolean = false;
 
   constructor(private router:Router, private searchService: SearchService, private alertController: AlertController) { }
 
   ngOnInit() {
   }
 
+  // this function is called when the user tries to submit their inputs on this page
   async onCheckinClick() {
     this.setExercise();
     this.setRating();
@@ -63,6 +63,7 @@ export class CheckinPage implements OnInit {
     );
   }
 
+  // this method presents a popup alert, warning the users that their input is invalid
   async presentAlert(){
     let a = await this.alertController.create({
       header: 'Invalid Exercise Type',

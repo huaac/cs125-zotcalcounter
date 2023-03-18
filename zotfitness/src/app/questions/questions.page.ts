@@ -36,17 +36,17 @@ export class QuestionsPage implements OnInit {
     this.muscleCategory = (ev.target as HTMLInputElement).value;
   }
 
-  // function that deletes stored username
+  // function that deletes stored goal
   removeGoal = async () => {
     await Preferences.remove({ key: 'goal' });
   };
 
-  // function that deletes stored password
+  // function that deletes stored muscle
   removeMuscles = async () => {
     await Preferences.remove({ key: 'muscles' });
   };
 
-  // function that sets goal with text from input box
+  // function that sets goal
   setGoal = async () => {
   await Preferences.set({
     key: 'goal',
@@ -54,7 +54,7 @@ export class QuestionsPage implements OnInit {
   });
   };
 
-  // function that sets password with text from input box
+  // function that sets muscles 
   setMuscles = async () => {
   await Preferences.set({
     key: 'muscles',
