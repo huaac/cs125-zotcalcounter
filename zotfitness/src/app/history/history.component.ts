@@ -70,12 +70,12 @@ export class HistoryComponent implements OnInit, OnDestroy {
   //checks whether an update is made to Exercise, if yes, the value is stored and updated
   getCheckinExercise() {
     const value = localStorage.getItem('CapacitorStorage.checkinExercise');
-    this.Exercise = value ? value : "0";
+    this.Exercise = value ? value : "-1";
   }
   //checks whether an update is made to Rating, if yes, the value is stored and updated
   getCheckinRating() {
     const value = localStorage.getItem('CapacitorStorage.checkinRating');
-    this.Rating = value ? value : "0";
+    this.Rating = value ? value : "-1";
   }
   //The function called by getCheckinDuration() to update the queue
   updateQueueValues() {
