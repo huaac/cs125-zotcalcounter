@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-
+import { Preferences } from '@capacitor/preferences';
 @Component({
   imports: [IonicModule, CommonModule],
   selector: 'app-history',
@@ -25,13 +25,11 @@ export class HistoryComponent implements OnInit, OnDestroy {
   @Output() myVariableChange = new EventEmitter<string>();
 
   constructor(private router: Router, public modalCtrl: ModalController) {}
-  //regularly checks whether the values of Duration, Exercise, Rating has been updated in other parts of the app
-  //The functions getCheckinDuration,getCheckinExercise, and getCheckinRating will only be called when a change is detected.
+  //regularly checks whether user has finished their input in the Checkin part of this page
+  //The function update_valuesandqueue will only be called when a change is detected.
   ngOnInit() {
     this.checkInterval = setInterval(() => {
-      this.getCheckinDuration();
-      this.getCheckinExercise();
-      this.getCheckinRating();
+      this.getCheckinFinished();
     }, 1000);
   }
 
@@ -57,27 +55,33 @@ export class HistoryComponent implements OnInit, OnDestroy {
   changePage() {
     this.router.navigateByUrl('/checkin');
   }
-  //checks whether an update is made to Duration, if yes, the queue is updated and the values are stored and updated
-  getCheckinDuration() {
+
+  //checks whether the checkin part has finished, if yes, the queue is updated and the values are stored and updated by calling update_valuesandqueue
+  getCheckinFinished() {
+    const value = localStorage.getItem('CapacitorStorage.checkinFinished');
+    if (value =="1"){
+    this.update_valuesandqueue();
+    }
+
+    //resets value of checkinFinished to 0.
+    Preferences.set({
+      key: 'checkinFinished',
+      value: "0",
+    })
+  }
+  //called when CheckinFinished function finds out the Checkin part has finished, it updates the queue and Duration, Exercise, Rating.
+  update_valuesandqueue() {
     const value: number = Number(localStorage.getItem('CapacitorStorage.checkinDuration'));
     const value1 = localStorage.getItem('CapacitorStorage.checkinExercise');
+    const value2 = localStorage.getItem('CapacitorStorage.checkinRating');
+    this.updateQueueValues();
+    this.Duration = value ? value: 0;
+    this.Exercise = value1 ? value1 : "-1";
+    this.Rating = value2 ? value2 : "-1";
 
-    if (value1 !==this.Exercise || value !== this.Duration) {
-      this.updateQueueValues();
-      this.Duration = value;
-    }
   }
-  //checks whether an update is made to Exercise, if yes, the value is stored and updated
-  getCheckinExercise() {
-    const value = localStorage.getItem('CapacitorStorage.checkinExercise');
-    this.Exercise = value ? value : "-1";
-  }
-  //checks whether an update is made to Rating, if yes, the value is stored and updated
-  getCheckinRating() {
-    const value = localStorage.getItem('CapacitorStorage.checkinRating');
-    this.Rating = value ? value : "-1";
-  }
-  //The function called by getCheckinDuration() to update the queue
+
+  //The function called by update_valuesandqueue() to update the queue
   updateQueueValues() {
     this.Duration12 = this.Duration11;
     this.Duration11 = this.Duration10;
