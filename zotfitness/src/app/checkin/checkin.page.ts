@@ -57,6 +57,7 @@ export class CheckinPage implements OnInit {
           };
 
           await this.searchService.updatePreferencesWithworkoutHistory(workoutRT);
+          this.setInputFinished();
           this.router.navigateByUrl('/history');
         }
       }
@@ -123,4 +124,12 @@ export class CheckinPage implements OnInit {
     value: this.durationCategory,
   });
   };
+
+  //function that sets the Finished value to 1, letting the history part know the checkin part is complete
+  setInputFinished = async () => {
+    await Preferences.set({
+      key: 'checkinFinished',
+      value: "1",
+    });
+    };
 }
